@@ -1,0 +1,21 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.2'
+    id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+    id 'java'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+}
+
+group = 'pdtg'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+
+apply from: 'gradle/configurations.gradle'
+apply from: 'gradle/repositories.gradle'
+apply from: 'gradle/dependencies.gradle'
+apply from: 'gradle/test.gradle'
+apply from: 'gradle/tasks.gradle'
+
+bootRun {
+    environment = ["SPRING_PROFILES_ACTIVE": "dev", "LOGGING_LEVEL": "DEBUG"]
+}
