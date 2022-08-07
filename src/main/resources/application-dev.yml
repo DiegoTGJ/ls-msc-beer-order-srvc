@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/springdevdb
+    url: jdbc:postgresql://localhost:5432/springdevorderdb
     username: springdevuser
     password: springdevpass
   jpa:

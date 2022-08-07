@@ -3,3 +3,6 @@ logging:
     pdtg: debug
 server:
   port: 8081
+pdtg:
+  brewery:
+    beerServiceHost: http://localhost:8080
