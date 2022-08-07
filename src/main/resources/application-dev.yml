@@ -15,3 +15,6 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
+  artemis:
+    user: artemis
+    password: simetraehcapa
