@@ -23,8 +23,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import pdtg.lsmscbeerordersrvc.domain.BeerOrder;
+import pdtg.lsmscbeerordersrvc.domain.BeerOrderStatusEnum;
 import pdtg.lsmscbeerordersrvc.domain.Customer;
-import pdtg.lsmscbeerordersrvc.domain.OrderStatusEnum;
 
 import javax.persistence.LockModeType;
 import java.util.List;
@@ -36,7 +36,7 @@ public interface BeerOrderRepository  extends JpaRepository<BeerOrder, UUID> {
 
     Page<BeerOrder> findAllByCustomer(Customer customer, Pageable pageable);
 
-    List<BeerOrder> findAllByOrderStatus(OrderStatusEnum orderStatusEnum);
+    List<BeerOrder> findAllByOrderStatus(BeerOrderStatusEnum beerOrderStatusEnum);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     BeerOrder findOneById(UUID id);
