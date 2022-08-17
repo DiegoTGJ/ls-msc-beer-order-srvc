@@ -3,15 +3,14 @@ package pdtg.lsmscbeerordersrvc.services;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pdtg.lsmscbeerordersrvc.bootstrap.BeerOrderBootStrap;
 import pdtg.lsmscbeerordersrvc.domain.Customer;
 import pdtg.lsmscbeerordersrvc.repositories.BeerOrderRepository;
 import pdtg.lsmscbeerordersrvc.repositories.CustomerRepository;
-import pdtg.lsmscbeerordersrvc.web.model.BeerOrderDto;
-import pdtg.lsmscbeerordersrvc.web.model.BeerOrderLineDto;
+import pdtg.ls.brewery.model.BeerOrderDto;
+import pdtg.ls.brewery.model.BeerOrderLineDto;
 
 import java.util.ArrayList;
 import java.util.List;

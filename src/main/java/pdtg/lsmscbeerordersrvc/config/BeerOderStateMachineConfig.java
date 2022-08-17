@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.config.EnableStateMachineFactory;
 import org.springframework.statemachine.config.StateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
+import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer;
 import pdtg.lsmscbeerordersrvc.domain.BeerOrderEvents;
 import pdtg.lsmscbeerordersrvc.domain.BeerOrderStatusEnum;
 
@@ -15,6 +16,7 @@ import java.util.EnumSet;
 @Configuration
 @EnableStateMachineFactory
 public class BeerOderStateMachineConfig extends StateMachineConfigurerAdapter<BeerOrderStatusEnum, BeerOrderEvents> {
+
     @Override
     public void configure(StateMachineStateConfigurer<BeerOrderStatusEnum, BeerOrderEvents> states) throws Exception {
         states.withStates()
@@ -27,4 +29,12 @@ public class BeerOderStateMachineConfig extends StateMachineConfigurerAdapter<Be
                 .end(BeerOrderStatusEnum.ALLOCATION_EXCEPTION);
     }
 
+    @Override
+    public void configure(StateMachineTransitionConfigurer<BeerOrderStatusEnum, BeerOrderEvents> transitions) throws Exception {
+        transitions.withExternal().source(BeerOrderStatusEnum.NEW).target(BeerOrderStatusEnum.NEW).event(BeerOrderEvents.VALIDATE_ORDER)
+                .and()
+                .withExternal().source(BeerOrderStatusEnum.NEW).target(BeerOrderStatusEnum.VALIDATED).event(BeerOrderEvents.VALIDATION_PASSED)
+                .and()
+                .withExternal().source(BeerOrderStatusEnum.NEW).target(BeerOrderStatusEnum.VALIDATION_EXCEPTION).event(BeerOrderEvents.VALIDATION_FAILED);
+    }
 }

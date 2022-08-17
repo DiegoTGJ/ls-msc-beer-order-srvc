@@ -30,8 +30,8 @@ import pdtg.lsmscbeerordersrvc.domain.Customer;
 import pdtg.lsmscbeerordersrvc.repositories.BeerOrderRepository;
 import pdtg.lsmscbeerordersrvc.repositories.CustomerRepository;
 import pdtg.lsmscbeerordersrvc.web.mappers.BeerOrderMapper;
-import pdtg.lsmscbeerordersrvc.web.model.BeerOrderDto;
-import pdtg.lsmscbeerordersrvc.web.model.BeerOrderPagedList;
+import pdtg.ls.brewery.model.BeerOrderDto;
+import pdtg.ls.brewery.model.BeerOrderPagedList;
 
 import java.util.Optional;
 import java.util.UUID;

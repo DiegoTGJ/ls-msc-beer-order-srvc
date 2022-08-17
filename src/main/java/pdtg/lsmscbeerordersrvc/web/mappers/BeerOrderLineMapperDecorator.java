@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import pdtg.lsmscbeerordersrvc.domain.BeerOrderLine;
 import pdtg.lsmscbeerordersrvc.services.beer.BeerService;
 import pdtg.lsmscbeerordersrvc.services.beer.model.BeerDto;
-import pdtg.lsmscbeerordersrvc.web.model.BeerOrderLineDto;
+import pdtg.ls.brewery.model.BeerOrderLineDto;
 
 import java.util.Optional;
 

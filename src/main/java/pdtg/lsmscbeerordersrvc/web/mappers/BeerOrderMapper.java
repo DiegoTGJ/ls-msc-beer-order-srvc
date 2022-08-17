@@ -20,7 +20,7 @@ package pdtg.lsmscbeerordersrvc.web.mappers;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import pdtg.lsmscbeerordersrvc.domain.BeerOrder;
-import pdtg.lsmscbeerordersrvc.web.model.BeerOrderDto;
+import pdtg.ls.brewery.model.BeerOrderDto;
 
 @Mapper(uses = {DateMapper.class, BeerOrderLineMapper.class})
 public interface BeerOrderMapper {
