@@ -24,6 +24,8 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
 
     private final StateMachineFactory<BeerOrderStatusEnum, BeerOrderEvents> stateMachineFactory;
     private final BeerOrderRepository beerOrderRepository;
+    private final BeerOrderStateChangeInterceptor beerOrderStateChangeInterceptor;
+    public static final String ORDER_ID_HEADER = "ORDER_ID_HEADER";
 
     @Transactional
     @Override
@@ -38,6 +40,7 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
     private void sendBeerOrderEvent(BeerOrder beerOrder, BeerOrderEvents event){
         StateMachine<BeerOrderStatusEnum,BeerOrderEvents> sm = build(beerOrder);
         Message<BeerOrderEvents> msg = MessageBuilder.withPayload(event)
+                .setHeader(ORDER_ID_HEADER,beerOrder.getId().toString())
                 .build();
 
         sm.sendEvent(Mono.just(msg)).subscribe();
@@ -49,9 +52,11 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
         sm.stopReactively().subscribe();
         sm.getStateMachineAccessor()
                 .doWithAllRegions(sma -> {
+                    sma.addStateMachineInterceptor(beerOrderStateChangeInterceptor);
                     sma.resetStateMachineReactively(
                             new DefaultStateMachineContext<>(beerOrder.getOrderStatus(),null,null,null))
                             .subscribe();
+
                 });
         sm.startReactively().subscribe();
         return sm;
