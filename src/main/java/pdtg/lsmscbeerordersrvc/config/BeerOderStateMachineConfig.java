@@ -1,6 +1,8 @@
 package pdtg.lsmscbeerordersrvc.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.statemachine.action.Action;
 import org.springframework.statemachine.config.EnableStateMachineFactory;
 import org.springframework.statemachine.config.StateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
@@ -15,7 +17,10 @@ import java.util.EnumSet;
  */
 @Configuration
 @EnableStateMachineFactory
+@RequiredArgsConstructor
 public class BeerOderStateMachineConfig extends StateMachineConfigurerAdapter<BeerOrderStatusEnum, BeerOrderEvents> {
+
+    private final Action<BeerOrderStatusEnum,BeerOrderEvents> validateOrderAction;
 
     @Override
     public void configure(StateMachineStateConfigurer<BeerOrderStatusEnum, BeerOrderEvents> states) throws Exception {
@@ -33,6 +38,7 @@ public class BeerOderStateMachineConfig extends StateMachineConfigurerAdapter<Be
     public void configure(StateMachineTransitionConfigurer<BeerOrderStatusEnum, BeerOrderEvents> transitions) throws Exception {
         transitions.withExternal().source(BeerOrderStatusEnum.NEW).target(BeerOrderStatusEnum.VALIDATION_PENDING)
                 .event(BeerOrderEvents.VALIDATE_ORDER)
+                .action(validateOrderAction)
                 .and()
                 .withExternal().source(BeerOrderStatusEnum.NEW).target(BeerOrderStatusEnum.VALIDATED)
                 .event(BeerOrderEvents.VALIDATION_PASSED)
