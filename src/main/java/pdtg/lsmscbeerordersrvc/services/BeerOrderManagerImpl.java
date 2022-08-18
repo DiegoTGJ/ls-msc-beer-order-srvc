@@ -8,6 +8,7 @@ import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.statemachine.support.DefaultStateMachineContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pdtg.ls.brewery.model.events.ValidateOrderResult;
 import pdtg.lsmscbeerordersrvc.domain.BeerOrder;
 import pdtg.lsmscbeerordersrvc.domain.BeerOrderEvents;
 import pdtg.lsmscbeerordersrvc.domain.BeerOrderStatusEnum;
@@ -37,6 +38,16 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
         return savedBeerOrder;
     }
 
+    @Transactional
+    @Override
+    public void validateResult(ValidateOrderResult result){
+        BeerOrder beerOrder = beerOrderRepository.getReferenceById(result.getOrderId());
+        if (result.isValid()){
+            sendBeerOrderEvent(beerOrder,BeerOrderEvents.VALIDATION_PASSED);
+        }else {
+            sendBeerOrderEvent(beerOrder, BeerOrderEvents.VALIDATION_FAILED);
+        }
+    }
     private void sendBeerOrderEvent(BeerOrder beerOrder, BeerOrderEvents event){
         StateMachine<BeerOrderStatusEnum,BeerOrderEvents> sm = build(beerOrder);
         Message<BeerOrderEvents> msg = MessageBuilder.withPayload(event)

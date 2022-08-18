@@ -6,7 +6,7 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
-import pdtg.ls.brewery.model.ValidateBeerOrderRequest;
+import pdtg.ls.brewery.model.events.ValidateBeerOrderRequest;
 import pdtg.lsmscbeerordersrvc.config.JmsConfig;
 import pdtg.lsmscbeerordersrvc.domain.BeerOrder;
 import pdtg.lsmscbeerordersrvc.domain.BeerOrderEvents;

@@ -1,5 +1,7 @@
 package pdtg.lsmscbeerordersrvc.services;
 
+import org.springframework.transaction.annotation.Transactional;
+import pdtg.ls.brewery.model.events.ValidateOrderResult;
 import pdtg.lsmscbeerordersrvc.domain.BeerOrder;
 
 /**
@@ -8,4 +10,7 @@ import pdtg.lsmscbeerordersrvc.domain.BeerOrder;
 public interface BeerOrderManager {
 
     BeerOrder newBeerOrder(BeerOrder beerOrder);
+
+    @Transactional
+    void validateResult(ValidateOrderResult result);
 }
