@@ -44,6 +44,8 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
         BeerOrder beerOrder = beerOrderRepository.getReferenceById(result.getOrderId());
         if (result.isValid()){
             sendBeerOrderEvent(beerOrder,BeerOrderEvents.VALIDATION_PASSED);
+            BeerOrder validatedOrder = beerOrderRepository.getReferenceById(result.getOrderId());
+            sendBeerOrderEvent(validatedOrder,BeerOrderEvents.ALLOCATE_ORDER);
         }else {
             sendBeerOrderEvent(beerOrder, BeerOrderEvents.VALIDATION_FAILED);
         }

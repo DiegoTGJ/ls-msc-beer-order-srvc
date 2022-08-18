@@ -13,6 +13,6 @@ import pdtg.ls.brewery.model.BeerOrderDto;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ValidateBeerOrderRequest {
+public class AllocateOrderRequest {
     private BeerOrderDto beerOrderDto;
 }
