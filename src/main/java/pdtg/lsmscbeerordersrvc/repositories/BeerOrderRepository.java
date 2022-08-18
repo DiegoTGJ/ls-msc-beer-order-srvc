@@ -17,16 +17,13 @@
 package pdtg.lsmscbeerordersrvc.repositories;
 
 
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Lock;
 import pdtg.lsmscbeerordersrvc.domain.BeerOrder;
 import pdtg.lsmscbeerordersrvc.domain.BeerOrderStatusEnum;
 import pdtg.lsmscbeerordersrvc.domain.Customer;
 
-import javax.persistence.LockModeType;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,6 +35,6 @@ public interface BeerOrderRepository  extends JpaRepository<BeerOrder, UUID> {
 
     List<BeerOrder> findAllByOrderStatus(BeerOrderStatusEnum beerOrderStatusEnum);
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    BeerOrder findOneById(UUID id);
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
+//    BeerOrder findOneById(UUID id);
 }

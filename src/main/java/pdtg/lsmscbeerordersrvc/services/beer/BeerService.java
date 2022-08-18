@@ -1,6 +1,6 @@
 package pdtg.lsmscbeerordersrvc.services.beer;
 
-import pdtg.lsmscbeerordersrvc.services.beer.model.BeerDto;
+import pdtg.ls.brewery.model.BeerDto;
 
 import java.util.Optional;
 import java.util.UUID;

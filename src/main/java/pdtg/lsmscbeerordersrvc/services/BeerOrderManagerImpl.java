@@ -15,7 +15,7 @@ import pdtg.lsmscbeerordersrvc.domain.BeerOrder;
 import pdtg.lsmscbeerordersrvc.domain.BeerOrderEvents;
 import pdtg.lsmscbeerordersrvc.domain.BeerOrderStatusEnum;
 import pdtg.lsmscbeerordersrvc.repositories.BeerOrderRepository;
-import reactor.core.publisher.Mono;
+import pdtg.lsmscbeerordersrvc.statemachine.BeerOrderStateChangeInterceptor;
 
 import java.util.Optional;
 
@@ -46,14 +46,21 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
     @Transactional
     @Override
     public void validateResult(ValidateOrderResult result){
-        BeerOrder beerOrder = beerOrderRepository.getReferenceById(result.getOrderId());
-        if (result.isValid()){
-            sendBeerOrderEvent(beerOrder,BeerOrderEvents.VALIDATION_PASSED);
-            BeerOrder validatedOrder = beerOrderRepository.getReferenceById(result.getOrderId());
-            sendBeerOrderEvent(validatedOrder,BeerOrderEvents.ALLOCATE_ORDER);
-        }else {
-            sendBeerOrderEvent(beerOrder, BeerOrderEvents.VALIDATION_FAILED);
+        Optional<BeerOrder> beerOrderOptional = beerOrderRepository.findById(result.getOrderId());
+        if (!beerOrderOptional.isPresent()){
+            log.error("Order with Id: "+result.getOrderId()+" Not Found.");
+            return;
         }
+        beerOrderOptional.ifPresent(beerOrder -> {
+            if (result.isValid()){
+                sendBeerOrderEvent(beerOrder,BeerOrderEvents.VALIDATION_PASSED);
+                BeerOrder validatedOrder = beerOrderRepository.findById(result.getOrderId()).get();
+                sendBeerOrderEvent(validatedOrder,BeerOrderEvents.ALLOCATE_ORDER);
+            }else {
+                sendBeerOrderEvent(beerOrder, BeerOrderEvents.VALIDATION_FAILED);
+            }
+        });
+
     }
 
     @Override
@@ -92,22 +99,21 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
                 .setHeader(ORDER_ID_HEADER,beerOrder.getId().toString())
                 .build();
 
-        sm.sendEvent(Mono.just(msg)).subscribe();
+        sm.sendEvent(msg);
     }
 
 
     private StateMachine<BeerOrderStatusEnum, BeerOrderEvents> build(BeerOrder beerOrder){
         StateMachine<BeerOrderStatusEnum, BeerOrderEvents> sm = stateMachineFactory.getStateMachine(beerOrder.getId());
-        sm.stopReactively().subscribe();
+        sm.stop();
         sm.getStateMachineAccessor()
                 .doWithAllRegions(sma -> {
                     sma.addStateMachineInterceptor(beerOrderStateChangeInterceptor);
-                    sma.resetStateMachineReactively(
-                            new DefaultStateMachineContext<>(beerOrder.getOrderStatus(),null,null,null))
-                            .subscribe();
+                    sma.resetStateMachine(
+                            new DefaultStateMachineContext<>(beerOrder.getOrderStatus(),null,null,null));
 
                 });
-        sm.startReactively().subscribe();
+        sm.start();
         return sm;
     }
 }

@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import pdtg.lsmscbeerordersrvc.services.beer.model.BeerDto;
+import pdtg.ls.brewery.model.BeerDto;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -20,8 +20,8 @@ public class BeerServiceRestTemplateImpl implements BeerService{
     private final RestTemplate restTemplate;
 
     private String beerServiceHost;
-    private final String BEER_SERVICE_PATH = "/api/v1/beer/";
-    private final String BEER_SERVICE_UPC_PATH = "/api/v1/beer/beerUpc/";
+    public static final String BEER_SERVICE_PATH = "/api/v1/beer/";
+    public static final String BEER_SERVICE_UPC_PATH = "/api/v1/beer/beerUpc/";
 
 
     public void setBeerServiceHost(String beerServiceHost){

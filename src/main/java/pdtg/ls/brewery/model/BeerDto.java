@@ -1,4 +1,4 @@
-package pdtg.lsmscbeerordersrvc.services.beer.model;
+package pdtg.ls.brewery.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +20,7 @@ public class BeerDto implements Serializable {
 
     static final long serialVersionUID = -7819536086997519795L;
 
+    private UUID id;
     private String upc;
     private String beerName;
     private String beerStyle;

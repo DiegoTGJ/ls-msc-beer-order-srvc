@@ -31,12 +31,13 @@ public class ValidateOrderAction implements Action<BeerOrderStatusEnum, BeerOrde
     @Override
     public void execute(StateContext<BeerOrderStatusEnum, BeerOrderEvents> context) {
         String beerOrderId = (String) context.getMessage().getHeaders().get(BeerOrderManagerImpl.ORDER_ID_HEADER);
-        BeerOrder beerOrder = beerOrderRepository.findOneById(UUID.fromString(beerOrderId));
+        log.info("Started validation for order id: "+beerOrderId);
+        BeerOrder beerOrder = beerOrderRepository.findById(UUID.fromString(beerOrderId)).get();
 
         jmsTemplate.convertAndSend(JmsConfig.VALIDATE_ORDER_QUEUE,ValidateBeerOrderRequest.builder()
                 .beerOrderDto(beerOrderMapper.beerOrderToDto(beerOrder))
                 .build());
 
-        log.debug("Sent Validation request to queue for order id");
+        log.info("Sent Validation request to queue for order id");
     }
 }

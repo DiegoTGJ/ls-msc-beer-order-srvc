@@ -1,0 +1,3 @@
+pdtg:
+  brewery:
+    beerServiceHost: http://localhost:8883

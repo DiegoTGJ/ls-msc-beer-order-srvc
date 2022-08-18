@@ -6,3 +6,11 @@ server:
 pdtg:
   brewery:
     beerServiceHost: http://localhost:8080
+spring:
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+      write-date-timestamps-as-nanoseconds: true
+  artemis:
+    user: artemis
+    password: simetraehcapa
