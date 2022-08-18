@@ -37,18 +37,28 @@ public class BeerOderStateMachineConfig extends StateMachineConfigurerAdapter<Be
 
     @Override
     public void configure(StateMachineTransitionConfigurer<BeerOrderStatusEnum, BeerOrderEvents> transitions) throws Exception {
-        transitions.withExternal().source(BeerOrderStatusEnum.NEW).target(BeerOrderStatusEnum.VALIDATION_PENDING)
+        transitions.withExternal()
+                .source(BeerOrderStatusEnum.NEW).target(BeerOrderStatusEnum.VALIDATION_PENDING)
                 .event(BeerOrderEvents.VALIDATE_ORDER)
                 .action(validateOrderAction)
-                .and()
-                .withExternal().source(BeerOrderStatusEnum.NEW).target(BeerOrderStatusEnum.VALIDATED)
+                .and().withExternal()
+                .source(BeerOrderStatusEnum.NEW).target(BeerOrderStatusEnum.VALIDATED)
                 .event(BeerOrderEvents.VALIDATION_PASSED)
-                .and()
-                .withExternal().source(BeerOrderStatusEnum.NEW).target(BeerOrderStatusEnum.VALIDATION_EXCEPTION)
+                .and().withExternal()
+                .source(BeerOrderStatusEnum.NEW).target(BeerOrderStatusEnum.VALIDATION_EXCEPTION)
                 .event(BeerOrderEvents.VALIDATION_FAILED)
                 .and().withExternal()
                 .source(BeerOrderStatusEnum.VALIDATED).target(BeerOrderStatusEnum.ALLOCATION_PENDING)
                 .event(BeerOrderEvents.VALIDATE_ORDER)
-                .action(allocateOrderAction);
+                .action(allocateOrderAction)
+                .and().withExternal()
+                .source(BeerOrderStatusEnum.ALLOCATION_PENDING).target(BeerOrderStatusEnum.ALLOCATED)
+                .event(BeerOrderEvents.ALLOCATION_SUCCESS)
+                .and().withExternal()
+                .source(BeerOrderStatusEnum.ALLOCATION_PENDING).target(BeerOrderStatusEnum.ALLOCATION_EXCEPTION)
+                .event(BeerOrderEvents.ALLOCATION_FAILED)
+                .and().withExternal()
+                .source(BeerOrderStatusEnum.ALLOCATION_PENDING).target(BeerOrderStatusEnum.PENDING_INVENTORY)
+                .event(BeerOrderEvents.ALLOCATION_NO_INVENTORY);
     }
 }
