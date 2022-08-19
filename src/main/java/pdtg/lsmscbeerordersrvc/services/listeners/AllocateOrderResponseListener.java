@@ -20,6 +20,7 @@ public class AllocateOrderResponseListener {
 
     @JmsListener(destination = JmsConfig.ALLOCATE_ORDER_RESULT_QUEUE)
     public void listen(AllocateOrderResult allocateOrderResult){
+        log.info("Received order allocation result for orderId: "+allocateOrderResult.getBeerOrderDto().getId());
         beerOrderManager.processAllocation(allocateOrderResult.getBeerOrderDto(),allocateOrderResult.isAllocationError(),allocateOrderResult.isPendingInventory());
     }
 

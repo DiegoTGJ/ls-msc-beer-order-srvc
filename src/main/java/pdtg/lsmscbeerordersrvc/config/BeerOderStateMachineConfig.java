@@ -49,7 +49,7 @@ public class BeerOderStateMachineConfig extends StateMachineConfigurerAdapter<Be
                 .event(BeerOrderEvents.VALIDATION_FAILED)
                 .and().withExternal()
                 .source(BeerOrderStatusEnum.VALIDATED).target(BeerOrderStatusEnum.ALLOCATION_PENDING)
-                .event(BeerOrderEvents.VALIDATE_ORDER)
+                .event(BeerOrderEvents.ALLOCATE_ORDER)
                 .action(allocateOrderAction)
                 .and().withExternal()
                 .source(BeerOrderStatusEnum.ALLOCATION_PENDING).target(BeerOrderStatusEnum.ALLOCATED)

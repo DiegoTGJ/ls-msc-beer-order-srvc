@@ -38,7 +38,7 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
     public BeerOrder newBeerOrder(BeerOrder beerOrder) {
         beerOrder.setId(null);
         beerOrder.setOrderStatus(BeerOrderStatusEnum.NEW);
-        BeerOrder savedBeerOrder = beerOrderRepository.save(beerOrder);
+        BeerOrder savedBeerOrder = beerOrderRepository.saveAndFlush(beerOrder);
         sendBeerOrderEvent(savedBeerOrder,BeerOrderEvents.VALIDATE_ORDER);
         return savedBeerOrder;
     }
@@ -53,7 +53,9 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
         }
         beerOrderOptional.ifPresent(beerOrder -> {
             if (result.isValid()){
+                log.info("result is valid");
                 sendBeerOrderEvent(beerOrder,BeerOrderEvents.VALIDATION_PASSED);
+                log.info("sent validation passed event");
                 BeerOrder validatedOrder = beerOrderRepository.findById(result.getOrderId()).get();
                 sendBeerOrderEvent(validatedOrder,BeerOrderEvents.ALLOCATE_ORDER);
             }else {
@@ -63,6 +65,7 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
 
     }
 
+    @Transactional
     @Override
     public void processAllocation(BeerOrderDto beerOrderDto, boolean allocationError, boolean pendingInventory) {
         Optional<BeerOrder> beerOrderOptional = beerOrderRepository.findById(beerOrderDto.getId());
@@ -90,7 +93,7 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
                 beerOrderLine.setQuantityAllocated(beerOrderLineDto.getQuantityAllocated());
             }
         }));
-        beerOrderRepository.saveAndFlush(beerOrder);
+        beerOrderRepository.save(beerOrder);
     }
 
     private void sendBeerOrderEvent(BeerOrder beerOrder, BeerOrderEvents event){

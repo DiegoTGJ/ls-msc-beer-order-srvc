@@ -23,6 +23,7 @@ public class BeerOrderValidationListener {
     @JmsListener(destination = JmsConfig.VALIDATE_ORDER_QUEUE)
     public void listen(Message<ValidateBeerOrderRequest> msg){
         ValidateBeerOrderRequest request = msg.getPayload();
+        log.info("Received Order Validation Request for orderId: "+request.getBeerOrderDto().getId());
         jmsTemplate.convertAndSend(JmsConfig.VALIDATE_ORDER_RESULT_QUEUE,
                 ValidateOrderResult.builder()
                         .isValid(true)

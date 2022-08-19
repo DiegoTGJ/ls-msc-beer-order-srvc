@@ -6,6 +6,7 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
+import pdtg.ls.brewery.model.events.AllocateOrderRequest;
 import pdtg.lsmscbeerordersrvc.config.JmsConfig;
 import pdtg.lsmscbeerordersrvc.domain.BeerOrder;
 import pdtg.lsmscbeerordersrvc.domain.BeerOrderEvents;
@@ -34,8 +35,10 @@ public class AllocateOrderAction implements Action<BeerOrderStatusEnum, BeerOrde
         BeerOrder beerOrder = beerOrderRepository.findById(UUID.fromString(beerOrderId)).get();
 
         jmsTemplate.convertAndSend(JmsConfig.ALLOCATE_ORDER_QUEUE,
-                beerOrderMapper.beerOrderToDto(beerOrder));
-        log.debug("Sent Allocation Request for order id: "+beerOrderId);
+                AllocateOrderRequest.builder()
+                        .beerOrderDto(beerOrderMapper.beerOrderToDto(beerOrder))
+                        .build());
+        log.info("Sent Allocation Request for order id: "+beerOrderId);
     }
 
 }

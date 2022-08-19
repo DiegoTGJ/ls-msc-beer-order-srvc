@@ -3,7 +3,7 @@ package pdtg.lsmscbeerordersrvc.services.listeners;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jms.annotation.JmsListener;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import pdtg.ls.brewery.model.events.ValidateOrderResult;
 import pdtg.lsmscbeerordersrvc.config.JmsConfig;
 import pdtg.lsmscbeerordersrvc.services.BeerOrderManager;
@@ -11,7 +11,7 @@ import pdtg.lsmscbeerordersrvc.services.BeerOrderManager;
 /**
  * Created by Diego T. 17-08-2022
  */
-@Service
+@Component
 @Slf4j
 @RequiredArgsConstructor
 public class ValidateOrderResponseListener {
